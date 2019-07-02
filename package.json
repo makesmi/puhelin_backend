@@ -1,0 +1,19 @@
+{
+  "name": "puhelin_backend",
+  "version": "0.0.1",
+  "description": "fullstack open osa 3 tehtavat",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm index.js",
+    "watch": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Makesmi",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
