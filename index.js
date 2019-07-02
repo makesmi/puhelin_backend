@@ -26,8 +26,16 @@ const persons = [
 ]
 
 app.get('/api/persons', (req, res) => {
-    console.log('HOOOOOOOO')
     res.json(persons)
+})
+
+app.get('/info', (req, res) => {
+    const count = persons.length
+    const date = new Date()
+
+    res.send(
+        `<p>Phonebook has info for ${count} people</p>
+         <p>${date}</p>`)
 })
 
 app.listen(3001, () => console.log('running...'))
