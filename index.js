@@ -1,9 +1,20 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const morgan = require('morgan')
 
 const app = express()
 
 app.use(bodyParser.json())
+app.use(morgan('tiny'))
+
+app.use((req, res, next) => {
+    console.log('Metodi ', req.method)
+    console.log('Path ', req.path)
+    console.log('Body ', req.body)
+    console.log('...')
+    next()
+})
+
 
 let persons = [
     {
@@ -79,4 +90,7 @@ app.get('/info', (req, res) => {
          <p>${date}</p>`)
 })
 
+app.use((req, res) => res.status(404).send({error: 'unknown path'}))
+
 app.listen(3001, () => console.log('running...'))
+
