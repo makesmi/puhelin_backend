@@ -1,6 +1,9 @@
 const express = require('express')
+const bodyParser = require('body-parser')
 
 const app = express()
+
+app.use(bodyParser.json())
 
 let persons = [
     {
@@ -45,6 +48,14 @@ app.delete('/api/persons/:id', (req, res) => {
     res.status(204).end()
 })
 
+app.post('/api/persons', (req, res) => {
+    const body = req.body
+    const newId = Math.floor(Math.random() * 100000000)
+    const newPerson = {...body, id: newId}
+    persons = persons.concat(newPerson)
+    res.json(newPerson)
+})
+
 app.get('/info', (req, res) => {
     const count = persons.length
     const date = new Date()
@@ -53,6 +64,5 @@ app.get('/info', (req, res) => {
         `<p>Phonebook has info for ${count} people</p>
          <p>${date}</p>`)
 })
-
 
 app.listen(3001, () => console.log('running...'))
