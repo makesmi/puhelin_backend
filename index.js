@@ -87,6 +87,7 @@ app.get('/info', (req, res) => {
 })
 
 app.use((req, res) => res.status(404).send({error: 'unknown path'}))
+const port = process.env.PORT || 3001
 
-app.listen(3001, () => console.log('running...'))
+app.listen(port, () => console.log('running...'))
 
