@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "fullstack open osa 3 tehtavat",
   "main": "index.js",
-  "scripts": { 
+  "scripts": {
     "start": "npm index.js",
     "watch": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,13 +11,13 @@
     "deploy": "git push heroku master",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
     "logs:prod": "heroku logs --tail"
-
   },
   "author": "Makesmi",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "mongoose": "^5.6.3",
     "morgan": "^1.9.1"
   },
   "devDependencies": {
