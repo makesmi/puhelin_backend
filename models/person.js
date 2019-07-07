@@ -11,10 +11,15 @@ mongoose.set('useCreateIndex', true)
 const personSchema = new mongoose.Schema({
     name: {
         type: String,
+        minlength: 3,
         required: true,
         unique: true
     },
-    number: String
+    number: {
+        type: String,
+        minlength: 8,
+        required: true
+    }
 })
 
 personSchema.plugin(uniqueValidator)
