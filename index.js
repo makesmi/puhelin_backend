@@ -82,6 +82,13 @@ app.post('/api/persons', (req, res) => {
     newPerson.save().then(res.json.bind(res))
 })
 
+app.put('/api/persons/:id', (req, res, next) => {
+    const person = (({name, number}) => ({name, number}))(req.body)
+    Person.findByIdAndUpdate(req.params.id, person, { new: true })
+        .then(res.json.bind(res))
+        .catch(next)
+})
+
 app.get('/info', (req, res) => {
     const count = persons.length
     const date = new Date()
