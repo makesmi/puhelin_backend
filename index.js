@@ -1,9 +1,13 @@
+require('dotenv').config()
+
 const express = require('express')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors') 
 
 const app = express()
+
+const Person = require('./models/person')
 
 morgan.token('body', (req, res) => req.method === 'POST' && JSON.stringify(req.body))
 
@@ -36,8 +40,10 @@ let persons = [
     }
 ]
 
+//minulla ainakaan ei tarvitse käsin kutsua person.toJSON() vaan se toimii automaattisesti
+
 app.get('/api/persons', (req, res) => {
-    res.json(persons)
+    Person.find({}).then(persons => res.json(persons))
 })
 
 app.get('/api/persons/:id', (req, res) => {
