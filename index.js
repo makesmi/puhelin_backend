@@ -46,7 +46,7 @@ app.post('/api/persons', (req, res, next) => {
     const newPerson = new Person({
         name: body.name, 
         number: body.number
-    })
+    }) 
 
     newPerson.save()
         .then(res.json.bind(res))
