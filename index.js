@@ -56,10 +56,10 @@ app.get('/api/persons/:id', (req, res) => {
     }
 })
 
-app.delete('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    persons = persons.filter(person => person.id !== id)
-    res.status(204).end()
+app.delete('/api/persons/:id', (req, res, next) => {
+    Person.findByIdAndRemove(req.params.id)
+        .then(() => res.status(204).end())
+        .catch(next)
 })
 
 app.post('/api/persons', (req, res) => {
@@ -92,6 +92,19 @@ app.get('/info', (req, res) => {
 })
 
 app.use((req, res) => res.status(404).send({error: 'unknown path'}))
+
+const errorHandler = (error, req, res, next) => {
+    console.log(error)
+
+    if(error.name === 'CastError' && error.kind == 'ObjectId'){
+        return res.status(400).send({ error: 'malformatted id' })
+    }
+
+    next(error)
+}
+
+app.use(errorHandler)
+
 const port = process.env.PORT || 3001
 
 app.listen(port, () => console.log('running...'))
