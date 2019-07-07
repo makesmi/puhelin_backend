@@ -3,13 +3,13 @@ require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
-const cors = require('cors') 
+const cors = require('cors')
 
 const app = express()
 
 const Person = require('./models/person')
 
-morgan.token('body', (req, res) => req.method === 'POST' && JSON.stringify(req.body))
+morgan.token('body', req => req.method === 'POST' && JSON.stringify(req.body))
 
 app.use(cors())
 app.use(bodyParser.json())
@@ -44,9 +44,9 @@ app.post('/api/persons', (req, res, next) => {
         })
     }
     const newPerson = new Person({
-        name: body.name, 
+        name: body.name,
         number: body.number
-    }) 
+    })
 
     newPerson.save()
         .then(res.json.bind(res))
@@ -54,7 +54,7 @@ app.post('/api/persons', (req, res, next) => {
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
-    const person = (({name, number}) => ({name, number}))(req.body)
+    const person = (({ name, number }) => ({ name, number }))(req.body)
     Person.findByIdAndUpdate(req.params.id, person, { new: true })
         .then(res.json.bind(res))
         .catch(next)
@@ -71,12 +71,12 @@ app.get('/info', (req, res) => {
         })
 })
 
-app.use((req, res) => res.status(404).send({error: 'unknown path'}))
+app.use((req, res) => res.status(404).send({ error: 'unknown path' }))
 
 const errorHandler = (error, req, res, next) => {
     console.log(error)
 
-    if(error.name === 'CastError' && error.kind == 'ObjectId'){
+    if(error.name === 'CastError' && error.kind === 'ObjectId'){
         return res.status(400).send({ error: 'malformatted id' })
     }else if(error.name === 'ValidationError'){
         return res.status(400).send({ error: error.message })

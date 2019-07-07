@@ -8,7 +8,7 @@ if(argCount < 3){
 }
 
 const password = process.argv[2]
-const url = `mongodb+srv://makesmi:${password}@cluster0-yst8a.mongodb.net/phonebook?retryWrites=true&w=majority` 
+const url = `mongodb+srv://makesmi:${password}@cluster0-yst8a.mongodb.net/phonebook?retryWrites=true&w=majority`
 
 mongoose.connect(url, { useNewUrlParser: true })
 
