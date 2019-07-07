@@ -17,28 +17,6 @@ app.use(express.static('build'))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 
-let persons = [
-    {
-        name: "Arto Hellas",
-        number: "040-123456",
-        id: 1
-    },
-    {
-        name: "Ada Lovelace",
-        number: "39-44-5323523",
-        id: 2
-    },
-    {
-        name: "Dan Abramov",
-        number: "12-43-234345",
-        id: 3
-    },
-    {
-        name: "Mary Poppendieck",
-        number: "39-23-6423122",
-        id: 4
-    }
-]
 
 //minulla ainakaan ei tarvitse käsin kutsua person.toJSON() vaan se toimii automaattisesti
 
@@ -46,14 +24,10 @@ app.get('/api/persons', (req, res) => {
     Person.find({}).then(persons => res.json(persons))
 })
 
-app.get('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    const person = persons.find(person => person.id === id)
-    if(person){
-        res.json(person)
-    }else{
-        res.status(404).end()
-    }
+app.get('/api/persons/:id', (req, res, next) => {
+    Person.findById(req.params.id)
+        .then(person => person ? res.json(person) : res.status(404).end())
+        .catch(next)
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {
@@ -67,11 +41,6 @@ app.post('/api/persons', (req, res) => {
     if(!body.name || !body.number){
         return res.status(400).json({
             error: 'name or number missing'
-        })
-    }
-    if(persons.find(person => person.name === body.name)){
-        return res.status(400).json({
-            error: 'name must be unique'
         })
     }
     const newPerson = new Person({
@@ -90,12 +59,14 @@ app.put('/api/persons/:id', (req, res, next) => {
 })
 
 app.get('/info', (req, res) => {
-    const count = persons.length
-    const date = new Date()
+    Person.countDocuments({})
+        .then(count => {
+            const date = new Date()
 
-    res.send(
-        `<p>Phonebook has info for ${count} people</p>
-         <p>${date}</p>`)
+            res.send(
+                `<p>Phonebook has info for ${count} people</p>
+                <p>${date}</p>`)
+        })
 })
 
 app.use((req, res) => res.status(404).send({error: 'unknown path'}))
